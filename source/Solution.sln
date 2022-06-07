@@ -1,0 +1,97 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleLogger", "..\cs-simple-logger\Source\SimpleLogger.csproj", "{E98F506A-1778-4742-AD71-62AE4A7EA8B8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{7289B200-2271-4A41-80D5-7B08E8601A83}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Youtube", "Youtube", "{FFA7811B-F9AE-4E0C-9D36-7539DFB93D6E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Telegram", "Telegram", "{E2859662-DF3C-4BB8-9378-8162C7726CBA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Facebook", "Facebook", "{0C27B24C-C5ED-4A97-A4BF-A20B3A2C2FCF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{4F792D8C-BD5A-41A2-8782-3B77BEEA586F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FacebookAutomation", "Facebook\FacebookAutomation\FacebookAutomation.csproj", "{3DD9C7B5-757A-4DE8-B753-B6077A315803}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelegramApi", "Telegram\TelegramApi\TelegramApi.csproj", "{FD1ADAC0-61D3-4AE1-B09B-6D141514DF40}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Testing\Tests\Tests.csproj", "{428AC72D-B40B-46B8-ACFA-D2BE65F306AE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestService", "Testing\TestService\TestService.csproj", "{A6667AB3-7F09-402D-A6F1-1971D13C30EF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YoutubeApi", "Youtube\YoutubeApi\YoutubeApi.csproj", "{8A9D4030-317D-4ED9-9D64-0B3125E62C9F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YoutubeService", "Youtube\YoutubeService\YoutubeService.csproj", "{5453914D-2C60-4108-BA44-712F802615F7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelegramService", "Telegram\TelegramService\TelegramService.csproj", "{7D05900C-EBD9-4ECF-BE25-33D57B918564}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Post2GroupService", "Facebook\Post2GroupService\Post2GroupService.csproj", "{54F9E788-4176-41FC-B6EB-E2FDA0438B16}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E98F506A-1778-4742-AD71-62AE4A7EA8B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E98F506A-1778-4742-AD71-62AE4A7EA8B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E98F506A-1778-4742-AD71-62AE4A7EA8B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E98F506A-1778-4742-AD71-62AE4A7EA8B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7289B200-2271-4A41-80D5-7B08E8601A83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7289B200-2271-4A41-80D5-7B08E8601A83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7289B200-2271-4A41-80D5-7B08E8601A83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7289B200-2271-4A41-80D5-7B08E8601A83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DD9C7B5-757A-4DE8-B753-B6077A315803}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DD9C7B5-757A-4DE8-B753-B6077A315803}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DD9C7B5-757A-4DE8-B753-B6077A315803}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DD9C7B5-757A-4DE8-B753-B6077A315803}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD1ADAC0-61D3-4AE1-B09B-6D141514DF40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD1ADAC0-61D3-4AE1-B09B-6D141514DF40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD1ADAC0-61D3-4AE1-B09B-6D141514DF40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD1ADAC0-61D3-4AE1-B09B-6D141514DF40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{428AC72D-B40B-46B8-ACFA-D2BE65F306AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{428AC72D-B40B-46B8-ACFA-D2BE65F306AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{428AC72D-B40B-46B8-ACFA-D2BE65F306AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{428AC72D-B40B-46B8-ACFA-D2BE65F306AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6667AB3-7F09-402D-A6F1-1971D13C30EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6667AB3-7F09-402D-A6F1-1971D13C30EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6667AB3-7F09-402D-A6F1-1971D13C30EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6667AB3-7F09-402D-A6F1-1971D13C30EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A9D4030-317D-4ED9-9D64-0B3125E62C9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A9D4030-317D-4ED9-9D64-0B3125E62C9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A9D4030-317D-4ED9-9D64-0B3125E62C9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A9D4030-317D-4ED9-9D64-0B3125E62C9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5453914D-2C60-4108-BA44-712F802615F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5453914D-2C60-4108-BA44-712F802615F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5453914D-2C60-4108-BA44-712F802615F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5453914D-2C60-4108-BA44-712F802615F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D05900C-EBD9-4ECF-BE25-33D57B918564}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D05900C-EBD9-4ECF-BE25-33D57B918564}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D05900C-EBD9-4ECF-BE25-33D57B918564}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D05900C-EBD9-4ECF-BE25-33D57B918564}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54F9E788-4176-41FC-B6EB-E2FDA0438B16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54F9E788-4176-41FC-B6EB-E2FDA0438B16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54F9E788-4176-41FC-B6EB-E2FDA0438B16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54F9E788-4176-41FC-B6EB-E2FDA0438B16}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3DD9C7B5-757A-4DE8-B753-B6077A315803} = {0C27B24C-C5ED-4A97-A4BF-A20B3A2C2FCF}
+		{FD1ADAC0-61D3-4AE1-B09B-6D141514DF40} = {E2859662-DF3C-4BB8-9378-8162C7726CBA}
+		{428AC72D-B40B-46B8-ACFA-D2BE65F306AE} = {4F792D8C-BD5A-41A2-8782-3B77BEEA586F}
+		{A6667AB3-7F09-402D-A6F1-1971D13C30EF} = {4F792D8C-BD5A-41A2-8782-3B77BEEA586F}
+		{8A9D4030-317D-4ED9-9D64-0B3125E62C9F} = {FFA7811B-F9AE-4E0C-9D36-7539DFB93D6E}
+		{5453914D-2C60-4108-BA44-712F802615F7} = {FFA7811B-F9AE-4E0C-9D36-7539DFB93D6E}
+		{7D05900C-EBD9-4ECF-BE25-33D57B918564} = {E2859662-DF3C-4BB8-9378-8162C7726CBA}
+		{54F9E788-4176-41FC-B6EB-E2FDA0438B16} = {0C27B24C-C5ED-4A97-A4BF-A20B3A2C2FCF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {25EE6F0B-2B43-4BA4-ADB5-9734B63137AD}
+	EndGlobalSection
+EndGlobal
