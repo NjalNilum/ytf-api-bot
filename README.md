@@ -1,3 +1,5 @@
+Comment
+Git commit times do not clash with my working hours. All work on my repos always takes place outside working hours (e.g. during lunch break). 
 # ytf-bot
 This is a c# service at all. It should run on windows, linux and os. 
 This service is able to check the latest channel updates on a youtube channel und punlish the news in telegram groups/channels/chats and facebook groups.
