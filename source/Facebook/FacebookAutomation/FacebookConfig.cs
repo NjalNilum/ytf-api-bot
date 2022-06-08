@@ -12,13 +12,22 @@ namespace FacebookAutomation
         public string GroupId { get; set; }
     }
 
-    public class FacebookConfig
+    public class User
     {
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
         [JsonPropertyName("email")]
         public string Email { get; set; }
 
         [JsonPropertyName("pw")]
         public string Pw { get; set; }
+    }
+
+    public class FacebookConfig
+    {
+        [JsonPropertyName("users")]
+        public List<User> Users { get; set; }
 
         [JsonPropertyName("testGroups")]
         public List<Group> TestGroups { get; set; }

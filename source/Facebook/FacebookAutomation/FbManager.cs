@@ -183,7 +183,7 @@ namespace FacebookAutomation
         {
             var result = 0;
             var fbAuto = new FacebookAutomation(this.WorkDir, this.logger);
-            fbAuto.Login(this.facebookConfig.Email, this.facebookConfig.Pw);
+            fbAuto.Login(this.facebookConfig.Users[0].Email, this.facebookConfig.Users[0].Pw);
 
             fbGroups.ForEach(group =>
                              {

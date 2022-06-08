@@ -39,7 +39,7 @@ namespace Tests
             var facebook = new FbAutomation(WorkFolder, logger);
             var facebookConfig = ConfigHelper.LoadFromJsonFile<FacebookConfig>(@"FacebookConfig.json");
 
-            facebook.Login(facebookConfig.Email, facebookConfig.Pw);
+            facebook.Login(facebookConfig.Users[0].Email, facebookConfig.Users[0].Pw);
             facebook.PublishToGroup(facebookConfig.TestGroups[0], theMessage);
             facebook.Dispose();
         }
