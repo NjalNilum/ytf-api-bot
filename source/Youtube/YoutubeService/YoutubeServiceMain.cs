@@ -4,6 +4,7 @@ using YoutubeApi;
 
 Logger myLogger = new Logger("YoutubeLog.log", Directories.LogDir);
 myLogger.LogInfo("I bims, der YoutubeService");
+myLogger.LogInfo($"ServiceWorkDir: {Directories.ServiceWorkDir}");
 
 try
 {

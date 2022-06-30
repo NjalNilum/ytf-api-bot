@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -67,7 +68,6 @@ namespace FacebookAutomation
 
         // beinhaltet link, findet so aber 2 Elemente
         //a[@role='link' and @target='_blank' and contains(@href,'youtube') and contains(@href,'PyAexdhNXjY')] 
-
 
         // id selector to find input box for email
         private static readonly By IdSelectorEmail =
@@ -201,6 +201,63 @@ namespace FacebookAutomation
             return true;
         }
 
+        public void CrawlMembersOfFbGroup(Group fbGroup)
+        {
+            // Navigate to group
+            this.webDriver.Url = $"https://www.facebook.com/groups/{fbGroup.GroupId}/members";
+
+            // Heißt hier: "Ein Mitglied finden"
+            // Wait until that post to group thing was hung into the dom
+            //if (!RepeatFunction(WaitForElementToAppear, this.webDriver, OpenPostToGroupDialogSelector))
+            //{
+            //    throw new ElementNotVisibleException("Couldn't find post to group button. Navigation to group failed");
+            //}
+
+            IJavaScriptExecutor js = (IJavaScriptExecutor)this.webDriver;
+
+            var endReached = false;
+            while (!endReached)
+            {
+                long heightB4 = (long)js.ExecuteScript("return document.body.scrollHeight");
+                js.ExecuteScript("window.scrollBy(0,  document.body.scrollHeight)");
+
+                long heightAfter;
+                var count = 0;
+                do
+                {
+                    heightAfter = (long)js.ExecuteScript("return document.body.scrollHeight");
+                    if (heightAfter == heightB4)
+                    {
+                        count++;
+                    }
+
+                    if (count > 15)
+                    {
+                        endReached = true;
+
+                        var domElements = GetElements(this.webDriver, GetXPathSelectorForGroupMembers(fbGroup), 30);
+                        foreach (var member in domElements)
+                        {
+                            var nameOfMember = member.GetAttribute("aria-label");
+                            var linkToGroupProfile = member.GetAttribute("href");
+                            var userId = linkToGroupProfile.Substring(linkToGroupProfile.IndexOf("user") + 4).Trim('/');
+
+                            // In die DB schreiben.
+                        }
+                    }
+                    Thread.Sleep(100);
+                } while (heightB4 == heightAfter && !endReached);
+            }
+
+            
+        }
+
+        private Tuple<string, By> GetXPathSelectorForGroupMembers(Group fbGroup)
+        {
+            return new("XPathSelectorGroupMembers",
+                       By.XPath($"//a[contains(@href, '/groups/{fbGroup.GroupId}/user/') and @aria-label]"));
+        }
+
         /// <summary>
         /// Make sure this method to be called, use the ctor of this class in a "using block".
         /// </summary>
@@ -291,6 +348,24 @@ namespace FacebookAutomation
 
             Thread.Sleep(TimeSpan.FromSeconds(2));
             return true;
+        }
+
+        /// <summary>
+        /// Returns all elements of the DOM that match the passed selector.
+        /// </summary>
+        /// <returns>The web elements</returns>
+        /// <exception cref="NoSuchElementException"></exception>
+        private ReadOnlyCollection<IWebElement> GetElements(IWebDriver driver, Tuple<string, By> elementLocator, int timeOut = 10)
+        {
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeOut));
+            var elements = driver.FindElements(elementLocator.Item2);
+            if (elements.Count == 0)
+            {
+                throw new NoSuchElementException(
+                    "No elements " + elementLocator + " ClickAndWaitForClickableElement");
+            }
+
+            return elements;
         }
 
         private string GetLogMessage(Exception e, Tuple<string, By> elementLocator)

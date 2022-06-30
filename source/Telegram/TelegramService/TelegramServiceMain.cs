@@ -5,6 +5,7 @@ using TelegramApi;
 
 Logger myLogger = new Logger("TelegramLog.log", Directories.LogDir);
 myLogger.LogInfo("I bims, der TelegramService");
+myLogger.LogInfo($"ServiceWorkDir: {Directories.ServiceWorkDir}");
 
 try
 {
@@ -13,9 +14,9 @@ try
 
     myLogger.LogInfo("Start Telegram Worker");
     var telegramManager = new TelegramManager(telegramConfig, VideoMetaDataFull.VideoFileSearchPattern, serviceWorkDir);
-    _ = telegramManager.StartSomeBotToHaufenChat();
-    //_ = telegramManager.StartBlackMetaloidToBmChat();
-    //_ = telegramManager.StartGermanBlackMetaloidToGbmChat();
+    //_ = telegramManager.StartSomeBotToHaufenChat();
+    _ = telegramManager.StartBlackMetaloidToBmChat();
+    _ = telegramManager.StartGermanBlackMetaloidToGbmChat();
 
     while (Console.ReadKey().Key != ConsoleKey.E)
     {

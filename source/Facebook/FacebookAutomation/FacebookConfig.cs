@@ -43,6 +43,12 @@ namespace FacebookAutomation
 
         [JsonPropertyName("taskGroups_DSBM")]
         public List<Group> TaskGroups_DSBM { get; set; }
+
+        [JsonPropertyName("taskGroups_smallVinylGroup")]
+        public List<Group> TaskGroups_smallVinylGroup { get; set; }
+
+        [JsonPropertyName("skyrimGroups")]
+        public List<Group> SkyrimGroups { get; set; }
     }
 
 }
