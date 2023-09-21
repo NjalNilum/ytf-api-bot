@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-
+﻿using System.Collections.Generic;
 using Common;
+using Common.Database;
+using Microsoft.VisualBasic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
@@ -11,133 +10,121 @@ namespace Tests
     [TestClass]
     public class UserDbTest
     {
-        public string WorkFolder => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "testUserDbWorkDir");
-
-        public string DbFile => "80KTest.db";
-
-        /// <summary>
-        /// Setup Test.
-        /// Cleas test folder or creats it.
-        /// </summary>
-        public void SetupTest()
+        public User CreateUser(string id)
         {
-            if (Directory.Exists(WorkFolder))
+            return new User
             {
-                // Clean dir
-                var di = new DirectoryInfo(WorkFolder);
-                foreach (var file in di.EnumerateFiles())
-                {
-                    file.Delete();
-                }
+                Id = $"i_bims_id_{id}",
+                Name = $"My name is {id}",
+                Email = string.Empty,
+                Groups = new List<string> { "group01", "group02" }
+            };
+        }
 
-                foreach (var directory in di.EnumerateDirectories())
-                {
-                    Directory.Delete(directory.FullName, true);
-                }
-            }
-            else
-            {
-                Directory.CreateDirectory(WorkFolder);
-            }
+        public List<Group> MakeGroups(User theUser)
+        {
+            var result = new List<Group>();
+            theUser.Groups.ForEach(group => result.Add(new Group { GroupId = group, GroupName = $"Names is {group}" }));
+            return result;
         }
 
         /// <summary>
-        /// TestMethod that checks functionality for simple methods like, Exist, Find, GetRandomUser.
+        /// Creates DB with 10 user and checks for count of documents and if users exist and not exist.
         /// </summary>
         [TestMethod]
-        public void SimpleMethodsTest()
+        public void SimpleDbUpdateTest()
         {
-            SetupTest();
-            var myTestDb = new FbUserDb(DbFile);
+            var myDB = new FbUserDb("the-test-db");
 
-            // this user exists in any case. The testfile includes 80K user with incremental userIds starting at 1.
-            var randomUserId = Random.Shared.Next(1, myTestDb.CountOfUsers).ToString();
+            for (int i = 0; i < 10; i++)
+            {
+                var user = CreateUser($"{i:D3}");
+                myDB.CreateOrOverwrite(user);
+                MakeGroups(user).ForEach(item => myDB.CreateOrOverwrite(item));
+            }
 
-            // Test Exist
-            Assert.IsTrue(myTestDb.Exists(randomUserId));
-            // Test find
-            var user = myTestDb.Find(item => item.Id == randomUserId);
-            // Test second Exist
-            Assert.IsTrue(myTestDb.Exists(user));
-            // Test second find
-            var user1 = myTestDb.Find(randomUserId);
-            Assert.AreEqual(user1.Id, user.Id);
-            // Test get random user
-            var randomUser = myTestDb.GetRandomUser();
-            Assert.IsTrue(myTestDb.Exists(randomUser));
+            var countOfUsers = myDB.CountOfUsers;
+            Assert.AreEqual(countOfUsers, 10);
+
+            var aUser = myDB.Find("i_bims_id_007");
+            Assert.IsNotNull(aUser);
+            aUser = myDB.Find("huan-son-006");
+            Assert.IsNull(aUser);
+
+            myDB.DropDatabase();
         }
 
         /// <summary>
-        /// This test was only used to create a large database file.
+        /// Checks the update method. 
         /// </summary>
         [TestMethod]
-        public void SerializeAndDeserializeTest()
+        public void TestUpdateMethod()
         {
-            SetupTest();
-            FbUserDb myDB = new FbUserDb();
-            for (int i = 1; i <= 10; i++)
-            {
-                var groups = new List<Group>();
-                var countOfGroups = Random.Shared.Next(10);
-                for (int j = 1; j < countOfGroups; j++)
-                {
-                    var groupId = Random.Shared.Next(20).ToString();
-                    var newGroup = new Group() { GroupId = groupId, GroupName = groupId };
-                    FbUserDb.UpdateGroup(groups, newGroup);
-                }
+            var myDB = new FbUserDb("the-test-db");
 
-                var newUser = new User
-                              {
-                                  Name = $"{i:D7}",
-                                  Groups = groups,
-                                  Id = i.ToString(),
-                                  Email = string.Empty
-                              };
+            myDB.Update("111", "My name is ringading", new Group { GroupId = "001", GroupName = "the super group" });
+            myDB.Update("112", "My name is other", new Group { GroupId = "003", GroupName = "the not group" });
 
-                myDB.Update(newUser);
-            }
+            var user = myDB.Find("111");
+            Assert.AreEqual(user.Groups.Count, 1);
+            Assert.AreEqual(user.Name, "My name is ringading");
 
-            var tmpDb = "Temp_Db.deleteMe";
-            myDB.SerializeDbToFile(Path.Combine(WorkFolder, tmpDb));
+            myDB.Update("111", "My new name is better", new Group { GroupId = "999", GroupName = "new groups are 999" }, "name@nowhere.none");
 
-            var theNewFabDataBase = new FbUserDb();
-            Assert.AreEqual(theNewFabDataBase.CountOfUsers, 0);
-            theNewFabDataBase.DeserializeFromFile(Path.Combine(WorkFolder, tmpDb));
-            Assert.AreEqual(theNewFabDataBase.CountOfUsers, 10);
-            Assert.IsTrue(theNewFabDataBase.Find(item => item.Id == "3")?.Id == "3");
-            File.Delete(Path.Combine(WorkFolder, tmpDb));
+            user = myDB.Find("111");
+            Assert.AreEqual(user.Groups.Count, 2);
+            Assert.AreEqual(user.Name, "My new name is better");
+
+            myDB.DropDatabase();
         }
 
-        /// <summary>
-        /// This test was only used to create a large database file.
-        /// </summary>
-        // [TestMethod]
-        public void CreateBigDb()
+        [TestMethod]
+        public void StressTest()
         {
-            SetupTest();
-            FbUserDb myDB = new FbUserDb();
-            for (int i = 1; i <= 80000; i++)
-            {
-                var groups = new List<Group>();
-                var countOfGroups = Random.Shared.Next(10);
-                for (int j = 1; j < countOfGroups; j++)
-                {
-                    var groupId = Random.Shared.Next(20).ToString();
-                    var newGroup = new Group() { GroupId = groupId, GroupName = groupId };
-                    FbUserDb.UpdateGroup(groups, newGroup);
-                }
-                
-                var newUser = new User
-                              {
-                                  Name = $"{i:D7}",
-                                  Groups = groups,
-                                  Id = i.ToString(),
-                                  Email = string.Empty
-                              };
+            var myDB = new FbUserDb("the-test-db");
 
-                myDB.Update(newUser);
+            var size = 3000; // Enlarge if want to play with it.
+            for (int i = 0; i < size; i++)
+            {
+                var user = CreateUser($"{i:D6}");
+                myDB.CreateOrOverwrite(user);
+                MakeGroups(user).ForEach(item => myDB.CreateOrOverwrite(item));
             }
-            myDB.SerializeDbToFile(Path.Combine(WorkFolder, DbFile));
+
+            var countOfUsers = myDB.CountOfUsers;
+            Assert.AreEqual(countOfUsers, size);
+
+            var aUser = myDB.Find("i_bims_id_000007");
+            Assert.IsNotNull(aUser);
+            aUser.Email = "my@my.my";
+            myDB.CreateOrOverwrite(aUser);
+            var sameUser = myDB.Find(aUser.Id);
+
+            aUser = myDB.Find("huan-son-006");
+            Assert.IsNull(aUser);
+
+            myDB.DropDatabase();
+        }
+
+        [TestMethod]
+        public void TestGetRandomUser()
+        {
+            var myDB = new FbUserDb("the-test-db");
+
+            var size = 100; // Enlarge if want to play with it.
+            for (int i = 0; i < size; i++)
+            {
+                var user = CreateUser($"{i:D6}");
+                myDB.CreateOrOverwrite(user);
+                MakeGroups(user).ForEach(item => myDB.CreateOrOverwrite(item));
+            }
+
+            var rndUser = myDB.GetRandomUser(1);
+            var users = myDB.GetRandomUser(15);
+
+            Assert.IsNotNull(rndUser);
+            Assert.AreEqual(users.Count, 15);
+            myDB.DropDatabase();
         }
     }
 }

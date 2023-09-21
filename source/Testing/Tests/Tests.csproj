@@ -44,9 +44,6 @@
     <None Update="2022-01-23T13-10-11Z_Full_Meta_YT.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="80KTest.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

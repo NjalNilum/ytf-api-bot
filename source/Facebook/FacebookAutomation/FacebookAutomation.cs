@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Common.Database;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
@@ -35,7 +37,7 @@ namespace FacebookAutomation
         // https://www.guru99.com/using-contains-sbiling-ancestor-to-find-element-in-selenium.html#:~:text=contains()%20in%20Selenium%20is,()%20function%20throughout%20the%20webpage.
 
         // css selector to find the cookie accept button
-        private static readonly Tuple<string, By> CssSelectorCookieAccept = 
+        private static readonly Tuple<string, By> CssSelectorCookieAccept =
             new(nameof(CssSelectorCookieAccept),
                 By.CssSelector("[data-testid = 'cookie-policy-manage-dialog-accept-button']"));
 
@@ -213,9 +215,11 @@ namespace FacebookAutomation
             //    throw new ElementNotVisibleException("Couldn't find post to group button. Navigation to group failed");
             //}
 
-            IJavaScriptExecutor js = (IJavaScriptExecutor)this.webDriver;
+            FbUserDb myUserDb = new FbUserDb();
 
+            IJavaScriptExecutor js = (IJavaScriptExecutor)this.webDriver;
             var endReached = false;
+            var position = 0;
             while (!endReached)
             {
                 long heightB4 = (long)js.ExecuteScript("return document.body.scrollHeight");
@@ -225,6 +229,22 @@ namespace FacebookAutomation
                 var count = 0;
                 do
                 {
+                    if (count == 0)
+                    {
+                        // checke den scheiß hier., Irgendwas geht nicht mehr
+                        var domElements = GetElements(this.webDriver, GetXPathSelectorForGroupMembers(fbGroup), 30);
+                        for (var i = position; i < domElements.Count; i++)
+                        {
+                            var userName = domElements[i].GetAttribute("aria-label");
+                            var linkToGroupProfile = domElements[i].GetAttribute("href");
+                            var userId = linkToGroupProfile[(linkToGroupProfile.IndexOf("user", StringComparison.Ordinal) + 4)..].Trim('/');
+
+                            myUserDb.Update(userId, userName, new Common.Group { GroupId = fbGroup.GroupId, GroupName = fbGroup.GroupName });
+                            
+                        }
+                        position = domElements.Count;
+                    }
+
                     heightAfter = (long)js.ExecuteScript("return document.body.scrollHeight");
                     if (heightAfter == heightB4)
                     {
@@ -234,22 +254,10 @@ namespace FacebookAutomation
                     if (count > 15)
                     {
                         endReached = true;
-
-                        var domElements = GetElements(this.webDriver, GetXPathSelectorForGroupMembers(fbGroup), 30);
-                        foreach (var member in domElements)
-                        {
-                            var nameOfMember = member.GetAttribute("aria-label");
-                            var linkToGroupProfile = member.GetAttribute("href");
-                            var userId = linkToGroupProfile.Substring(linkToGroupProfile.IndexOf("user") + 4).Trim('/');
-
-                            // In die DB schreiben.
-                        }
                     }
                     Thread.Sleep(100);
                 } while (heightB4 == heightAfter && !endReached);
             }
-
-            
         }
 
         private Tuple<string, By> GetXPathSelectorForGroupMembers(Group fbGroup)
@@ -295,7 +303,7 @@ namespace FacebookAutomation
                 this.logger.LogError(GetLogMessage(e, elementLocator));
                 return false;
             }
-            
+
             Thread.Sleep(TimeSpan.FromSeconds(2));
             return true;
         }
@@ -385,9 +393,9 @@ namespace FacebookAutomation
         /// <param name="elementSelector">Function argument 2</param>
         /// <param name="timeout">Function argument 3</param>
         /// <returns></returns>
-        private bool RepeatFunction(Func<IWebDriver, Tuple<string, By>, int, bool> function, 
-                                    IWebDriver driver, 
-                                    Tuple<string, By> elementSelector, 
+        private bool RepeatFunction(Func<IWebDriver, Tuple<string, By>, int, bool> function,
+                                    IWebDriver driver,
+                                    Tuple<string, By> elementSelector,
                                     int timeout = 10,
                                     int repeatCount = 2)
         {
